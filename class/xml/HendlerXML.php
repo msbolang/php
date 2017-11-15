@@ -75,7 +75,7 @@ class HendlerXML {
         $xml->endElement();
 
         $xml->startElement('ceb:ebpName');
-        $xml->text('珠海市玛嘉斯科技有限公司');
+        $xml->text('有限公司');
         $xml->endElement();
 
         $xml->startElement('ceb:ebcCode');
@@ -83,7 +83,7 @@ class HendlerXML {
         $xml->endElement();
 
         $xml->startElement('ceb:ebcName');
-        $xml->text('珠海市玛嘉斯科技有限公司');
+        $xml->text('有限公司');
         $xml->endElement();
 
         $xml->startElement('ceb:goodsValue'); //$this->_app['goodsValue'] 商品实际成交价，含非现金抵扣金额。
@@ -233,7 +233,7 @@ class HendlerXML {
         $xml->endElement();
 
         $xml->startElement('ceb:copName'); //报文传输的企业名称
-        $xml->text('珠海市玛嘉斯科技有限公司');
+        $xml->text('有限公司');
         $xml->endElement();
 
         $xml->startElement('ceb:dxpMode'); //默认为DXP；指中国电子口岸数据交换平台
@@ -241,7 +241,7 @@ class HendlerXML {
         $xml->endElement();
 
         $xml->startElement('ceb:dxpId'); //向中国电子口岸数据中心申请数据交换平台的用户编号
-        $xml->text('DXPENT0000014004');
+        $xml->text('014004');
         $xml->endElement();
 
         $xml->startElement('ceb:note'); //備註 否
