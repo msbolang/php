@@ -69,6 +69,22 @@ class OrderController extends Controller {
 
                 //值全填滿，所以不加判斷了
                 if ($j == 0) {
+                    
+                    //定义颜色字体居中
+                      $styleArray1 = array(
+                        'font' => array(
+                            'bold' => FALSE,
+                            'size'=>9,
+                            'color'=>array(
+                                'argb' => '00000000',
+                              ),
+                            ),
+                        'alignment' => array(
+                          'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                        ),
+                      );
+                    
+                    
 //                    if ($product_num > 1) {
 //                        $objPHPExcel->getActiveSheet()->mergeCells('A' . $plus . ':' . 'A' . ($plus + $product_num - 1));
 //                        $objPHPExcel->getActiveSheet()->mergeCells('B' . $plus . ':' . 'B' . ($plus + $product_num - 1));
@@ -82,53 +98,92 @@ class OrderController extends Controller {
 //                        $objPHPExcel->getActiveSheet()->mergeCells('R' . $plus . ':' . 'R' . ($plus + $product_num - 1));
 //                    }
 
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('A' . $plus, $i + 1);
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('B' . $plus, $orders[$i]['order_no'] . $orders[$i]['replacecallback'],PHPExcel_Cell_DataType::TYPE_STRING);
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('C' . $plus, $orders[$i]['express_no'],PHPExcel_Cell_DataType::TYPE_STRING);
-
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('D' . $plus, $orders[$i]['pay_no'],PHPExcel_Cell_DataType::TYPE_STRING); //(支付单号需要开发)
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('E' . $plus, $orders[$i]['pay_time']); //(支付时间)20171109152934
-     
-                    $userInfo = $this->getUserInfoForXML($orders[$i]['user_id']);
+                   $objPHPExcel->getActiveSheet(0)->setCellValue('A' . $plus, $i + 1);
+                    $objPHPExcel->getActiveSheet()->getStyle('A'. $plus)->applyFromArray($styleArray1);
                     
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('B' . $plus, $orders[$i]['order_no'] . $orders[$i]['replacecallback'].' ',PHPExcel_Cell_DataType::TYPE_STRING);
+                    $objPHPExcel->getActiveSheet()->getStyle('B'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('C' . $plus, $orders[$i]['express_no'].' ',PHPExcel_Cell_DataType::TYPE_STRING);
+                    $objPHPExcel->getActiveSheet()->getStyle('C'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('D' . $plus, $orders[$i]['r7_TrxNo'].' ',PHPExcel_Cell_DataType::TYPE_STRING); //(支付单号需要开发)
+                    $objPHPExcel->getActiveSheet()->getStyle('D'. $plus)->applyFromArray($styleArray1);
+                    
+                    $_strDate = date('YmdHis',strtotime($orders[$i]['ra_PayTime']));
+                    $objPHPExcel->getActiveSheet(0)->setCellValue('E' . $plus, $_strDate.' ',PHPExcel_Cell_DataType::TYPE_STRING); //(支付时间)20171109152934
+                    $objPHPExcel->getActiveSheet()->getStyle('E'. $plus)->applyFromArray($styleArray1);
+                    
+                    $userInfo = $this->getUserInfoForXML($orders[$i]['user_id']);
                     $objPHPExcel->getActiveSheet(0)->setCellValue('F' . $plus, $userInfo['real_name']); //订购人
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('G' . $plus, $userInfo['identity_card'],PHPExcel_Cell_DataType::TYPE_STRING); //订购人证件号
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('H' . $plus, $userInfo['mobile'],PHPExcel_Cell_DataType::TYPE_STRING); //订购人电话
+                    $objPHPExcel->getActiveSheet()->getStyle('F'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('G' . $plus, $userInfo['identity_card'].' ',PHPExcel_Cell_DataType::TYPE_STRING); //订购人证件号
+                    $objPHPExcel->getActiveSheet()->getStyle('G'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('H' . $plus, $userInfo['mobile'].' ',PHPExcel_Cell_DataType::TYPE_STRING); //订购人电话
+                    $objPHPExcel->getActiveSheet()->getStyle('H'. $plus)->applyFromArray($styleArray1);
                     
                     $objPHPExcel->getActiveSheet(0)->setCellValue('I' . $plus, $orders[$i]['accept_name']); //收货人姓名
-                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('J' . $plus, $orders[$i]['mobile'],PHPExcel_Cell_DataType::TYPE_STRING); //收货人电话
+                    $objPHPExcel->getActiveSheet()->getStyle('I'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValueExplicit('J' . $plus, $orders[$i]['mobile'].' ',PHPExcel_Cell_DataType::TYPE_STRING); //收货人电话
+                    $objPHPExcel->getActiveSheet()->getStyle('J'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('K' . $plus, $parse_area[$orders[$i]['province']] . $parse_area[$orders[$i]['city']] . $parse_area[$orders[$i]['county']] . $orders[$i]['addr']); //收货地址全
+                    $objPHPExcel->getActiveSheet()->getStyle('K'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('L' . $plus, '公路运输'); //运输方式  公路运输
-
+                    $objPHPExcel->getActiveSheet()->getStyle('L'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('M' . $plus, ''); //运输工具编号  空
+                    $objPHPExcel->getActiveSheet()->getStyle('M'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('N' . $plus, ''); //航班航次号   空
+                    $objPHPExcel->getActiveSheet()->getStyle('N'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('O' . $plus, ''); //提运单号   空
+                    $objPHPExcel->getActiveSheet()->getStyle('O'. $plus)->applyFromArray($styleArray1);
 
                     $objPHPExcel->getActiveSheet(0)->setCellValue('P' . $plus, '澳門'); //起运国（地区）
+                    $objPHPExcel->getActiveSheet()->getStyle('P'. $plus)->applyFromArray($styleArray1);
                 
                     $objPHPExcel->getActiveSheet(0)->setCellValue('Q' . $plus,  $orders[$i]['real_freight'] > 0 ? $orders[$i]['real_freight']: 0); //运费
+                    $objPHPExcel->getActiveSheet()->getStyle('Q'. $plus)->applyFromArray($styleArray1);
                     
                     $objPHPExcel->getActiveSheet(0)->setCellValue('R' . $plus, 0); //保费
+                    $objPHPExcel->getActiveSheet()->getStyle('R'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('S' . $plus, ''); //包装种类   空
-
+                    $objPHPExcel->getActiveSheet()->getStyle('S'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('T' . $plus, ''); //包裹毛重（千克）空起來 自己填
-                     
+                    $objPHPExcel->getActiveSheet()->getStyle('T'. $plus)->applyFromArray($styleArray1);
                 }
                 
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('U' . $plus, $products[$j]['weight']*$products[$j]['goods_nums']); //包裹净重（千克）
+                    $objPHPExcel->getActiveSheet(0)->setCellValue('U' . $plus, number_format($products[$j]['weight']*$products[$j]['goods_nums']/1000,2,'.','')); //包裹净重（千克） 网站是g 导出需要kg
+                    $objPHPExcel->getActiveSheet()->getStyle('U'. $plus)->applyFromArray($styleArray1);
                     
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('V' . $plus, $products[$j]['goods_no']); //企业商品货号SKU*
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('W' . $plus, $products[$j]['good_name']); //企业商品品名good_name
-        
+                    $objPHPExcel->getActiveSheet(0)->setCellValue('V' . $plus, $this->goodsNo_($products[$j]['goods_no'])); //企业商品货号SKU*
+                    $objPHPExcel->getActiveSheet()->getStyle('V'. $plus)->applyFromArray($styleArray1);
+                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValue('W' . $plus, $products[$j]['filing_name']); //企业商品品名good_name
+                    $objPHPExcel->getActiveSheet()->getStyle('W'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('X' . $plus, $this->_getGoodsCountry($products[$j]['country_id'])); //原产国
+                    $objPHPExcel->getActiveSheet()->getStyle('X'. $plus)->applyFromArray($styleArray1);
                   
                     $objPHPExcel->getActiveSheet(0)->setCellValue('Y' . $plus, $products[$j]['goods_nums']); //数量
+                    $objPHPExcel->getActiveSheet()->getStyle('Y'. $plus)->applyFromArray($styleArray1);
                     
                     $objPHPExcel->getActiveSheet(0)->setCellValue('Z' . $plus, $products[$j]['unit']); //成交单位
+                    $objPHPExcel->getActiveSheet()->getStyle('Z'. $plus)->applyFromArray($styleArray1);
+                    
                     $objPHPExcel->getActiveSheet(0)->setCellValue('AA' . $plus, $products[$j]['real_price']); //单价
+                    $objPHPExcel->getActiveSheet()->getStyle('AA'. $plus)->applyFromArray($styleArray1);
                     
-                    $objPHPExcel->getActiveSheet(0)->setCellValue('AB' . $plus, number_format(($products[$j]['real_price']*$products[$j]['goods_nums']),2)); //总价
-                    
+                    $objPHPExcel->getActiveSheet(0)->setCellValue('AB' . $plus, number_format(($products[$j]['real_price']*$products[$j]['goods_nums']),2,'.','')); //总价
+                    $objPHPExcel->getActiveSheet()->getStyle('AB'. $plus)->applyFromArray($styleArray1);
 
                 $objPHPExcel->getActiveSheet()->getRowDimension($plus)->setRowHeight(16);
 //                $objPHPExcel->getActiveSheet()->getStyle('A' . $plus . ':R' . $plus)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
